@@ -1,0 +1,24 @@
+##----------------------------------------------------------------------------##
+add_library(HelperCuda
+    SHARED
+    helper_cuda.h
+    streamEvent.h
+    cublasWrappers.h
+    memcpyWrappers.h
+    memsetWrappers.h
+)
+
+target_link_libraries(HelperCuda
+    PUBLIC
+    -lcuda
+    -lcudart
+    -lcublas
+    -lstdc++
+)
+
+set_target_properties(HelperCuda PROPERTIES LINKER_LANGUAGE CXX)
+
+target_include_directories(HelperCuda
+    PUBLIC
+    ${SRC_DIR}/common/include
+)

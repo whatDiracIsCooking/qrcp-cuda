@@ -1,0 +1,23 @@
+cmake_minimum_required(VERSION 3.22)
+
+set(CMAKE_CUDA_SEPARABLE_COMPILATION ON)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+project(test LANGUAGES CXX CUDA)
+
+set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I/usr/local/cuda/include -std=c++${CMAKE_CXX_STANDARD}")
+
+set(SRC_DIR ${PROJECT_SOURCE_DIR}/src)
+set(INCLUDE_DIR ${PROJECT_SOURCE_DIR}/src/common/include)
+set(TEST_DIR ${PROJECT_SOURCE_DIR}/test)
+set(TEST_BIN_DIR ${CMAKE_BINARY_DIR}/bin/test)
+
+#file(MAKE_DIRECTORY ${LIB_DIR})
+#file(MAKE_DIRECTORY ${BIN_DIR})
+#file(MAKE_DIRECTORY ${SRC_DIR})
+file(MAKE_DIRECTORY ${TEST_BIN_DIR})
+
+add_subdirectory(src)
+add_subdirectory(test)
