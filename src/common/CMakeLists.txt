@@ -3,9 +3,6 @@ add_library(HelperCuda
     SHARED
     helper_cuda.h
     streamEvent.h
-    cublasWrappers.h
-    memcpyWrappers.h
-    memsetWrappers.h
 )
 
 target_link_libraries(HelperCuda
@@ -22,3 +19,5 @@ target_include_directories(HelperCuda
     PUBLIC
     ${SRC_DIR}/common/include
 )
+
+add_subdirectory(wrappers)

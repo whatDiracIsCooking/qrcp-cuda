@@ -1,8 +1,8 @@
 #pragma once
 
 // includes, project
-#include "helper_cuda.h"
-#include "streamEvent.h"
+#include <helper_cuda.h>
+#include <streamEvent.h>
 
 namespace qrcp {
 

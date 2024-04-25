@@ -10,6 +10,7 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I/usr/local/cuda/include -std=c++${CMAKE_CXX_STANDARD}")
 
 set(SRC_DIR ${PROJECT_SOURCE_DIR}/src)
+set(COMMON_DIR ${PROJECT_SOURCE_DIR}/src/common)
 set(INCLUDE_DIR ${PROJECT_SOURCE_DIR}/src/common/include)
 set(TEST_DIR ${PROJECT_SOURCE_DIR}/test)
 set(TEST_BIN_DIR ${CMAKE_BINARY_DIR}/bin/test)

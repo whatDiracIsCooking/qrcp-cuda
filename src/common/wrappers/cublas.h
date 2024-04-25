@@ -1,5 +1,4 @@
-#ifndef _CUBLAS_WRAPPERS_H_
-#define _CUBLAS_WRAPPERS_H_
+#pragma once
 
 // includes, system
 #include <cuda.h>
@@ -7,7 +6,7 @@
 #include <cublas_v2.h>
 
 // includes, project
-#include <common/helper_cuda.h>
+#include <helper_cuda.h>
 
 namespace qrcp {
 
@@ -117,7 +116,4 @@ void inline gemm(cublasHandle_t& handle,
     CUBLAS_CHECK(cublasDgemm(handle, transa, transb, m, n, k, alpha, A, lda, B, ldb, beta, C, ldc));
 }
 
-
 } // namespace qrcp
-
-#endif  // #ifndef _CUBLAS_WRAPPERS_H_

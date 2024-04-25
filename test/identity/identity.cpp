@@ -7,10 +7,9 @@
 #include <identity/identity.h>
 #include <common/helper_cuda.h>
 #include <common/streamEvent.h>
-#include <common/cublasWrappers.h>
 #include <common/cbHandle.h>
-#include <common/memcpyWrappers.h>
-#include <common/memsetWrappers.h>
+#include <wrappers/memcpy.h>
+#include <wrappers/memset.h>
 #include <test_tools.h>
 
 using namespace qrcp;

@@ -10,8 +10,8 @@ namespace test {
 //----------------------------------------------------------------------------//
 constexpr size_t MAX_SIZE = 1 << 30;
 constexpr float TOL = 1. / (1 << 20);
-void* d_pool;
-void* h_pool;
+char* d_pool;
+char* h_pool;
 
 //----------------------------------------------------------------------------//
 // Initialize memory pools at the start of a suite.

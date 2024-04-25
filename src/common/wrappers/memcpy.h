@@ -1,8 +1,8 @@
 #pragma once
 
 // includes, project
-#include "helper_cuda.h"
-#include "streamEvent.h"
+#include <helper_cuda.h>
+#include <streamEvent.h>
 
 namespace qrcp {
 
@@ -34,12 +34,15 @@ inline void memcpy(T* dstPtr,
         case H2H:
             std::memcpy(dst, src, numBytes);
             break;
+
         case H2D:
             CUDA_CHECK(cudaMemcpy(dst, src, numBytes, cudaMemcpyHostToDevice));
             break;
+
         case D2H:
             CUDA_CHECK(cudaMemcpy(dst, src, numBytes, cudaMemcpyDeviceToHost));
             break;
+
         case D2D:
             CUDA_CHECK(cudaMemcpy(dst, src, numBytes, cudaMemcpyDeviceToDevice));
             break;
@@ -62,10 +65,12 @@ inline void memcpy(T* dstPtr,
             CUDA_CHECK(cudaMemcpyAsync(dst, src, numBytes,
                 cudaMemcpyHostToDevice, !stream));
             break;
+
         case D2H:
             CUDA_CHECK(cudaMemcpyAsync(dst, src, numBytes,
                 cudaMemcpyDeviceToHost, !stream));
             break;
+
         case D2D:
             CUDA_CHECK(cudaMemcpyAsync(dst, src, numBytes,
                 cudaMemcpyDeviceToDevice, !stream));

@@ -1,5 +1,4 @@
-#ifndef _STREAM_EVENT_H_
-#define _STREAM_EVENT_H_
+#pragma once
 
 // includes, system
 #include <cuda.h>
@@ -109,5 +108,3 @@ class ringContainer
 };
 
 } // namespace qrcp
-
-#endif  // #ifndef _STREAM_EVENT_H_
