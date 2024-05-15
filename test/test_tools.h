@@ -24,7 +24,7 @@ void initMemPools();
 void releaseMemPools();
 
 //----------------------------------------------------------------------------//
-// Create an identity matrix host matrix for which the norm of each column (excluding the
+// Create an identity matrix.
 //----------------------------------------------------------------------------//
 template <typename T>
 void makeIdentityMatrix(const size_t dim,

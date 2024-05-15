@@ -67,24 +67,28 @@ template <typename T,
           PointerType ptrType>
 inline void freePtr(T* ptr)
 {
-    switch (ptrType)
+    if (nullptr != ptr)
     {
-        case HostPtr:
-            std::free(ptr);
-            break;
+        switch (ptrType)
+        {
+            case HostPtr:
+                std::free(ptr);
+                break;
 
-        case PlockedPtr:
-            CUDA_CHECK(cudaFreeHost(ptr));
-            break;
+            case PlockedPtr:
+                CUDA_CHECK(cudaFreeHost(ptr));
+                break;
 
-        case UnifiedPtr:
-            CUDA_CHECK(cudaFree(ptr));
-            break;
+            case UnifiedPtr:
+                CUDA_CHECK(cudaFree(ptr));
+                break;
 
-        case DevPtr:
-            CUDA_CHECK(cudaFree(ptr));
-            break;
+            case DevPtr:
+                CUDA_CHECK(cudaFree(ptr));
+                break;
+        }
     }
+    ptr = nullptr;
 }
 
 // This has the aesthetics of partial specialization.

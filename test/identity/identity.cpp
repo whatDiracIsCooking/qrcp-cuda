@@ -32,7 +32,7 @@ void test_setIdentity(const size_t dim)
 
     // Copy results to host.
     T* h_eye = reinterpret_cast<T*>(h_pool);
-    memcpy<T, D2H>(h_eye, d_eye, dim * dim, stream);
+    memcpy<T, D2H>(h_eye, d_eye, dim * dim, !stream);
 
     // Create validation matrix.
     T* h_validate = reinterpret_cast<T*>(h_pool) + (dim * dim);

@@ -54,7 +54,7 @@ template <typename T, CopyType cpyType>
 inline void memcpy(T* dstPtr,
                    const T* srcPtr,
                    const size_t numElts,
-                   cuStream& stream)
+                   cudaStream_t stream)
 {
     void* dst = static_cast<void*>(dstPtr);
     const void* src = static_cast<const void*>(srcPtr);
@@ -63,17 +63,17 @@ inline void memcpy(T* dstPtr,
     {
         case H2D:
             CUDA_CHECK(cudaMemcpyAsync(dst, src, numBytes,
-                cudaMemcpyHostToDevice, !stream));
+                cudaMemcpyHostToDevice, stream));
             break;
 
         case D2H:
             CUDA_CHECK(cudaMemcpyAsync(dst, src, numBytes,
-                cudaMemcpyDeviceToHost, !stream));
+                cudaMemcpyDeviceToHost, stream));
             break;
 
         case D2D:
             CUDA_CHECK(cudaMemcpyAsync(dst, src, numBytes,
-                cudaMemcpyDeviceToDevice, !stream));
+                cudaMemcpyDeviceToDevice, stream));
             break;
     }
 }

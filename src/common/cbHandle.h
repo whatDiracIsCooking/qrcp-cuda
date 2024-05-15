@@ -1,5 +1,4 @@
-#ifndef _CB_HANDLE_H_
-#define _CB_HANDLE_H_
+#pragma once
 
 // includes, system
 #include <cuda.h>
@@ -41,5 +40,3 @@ class cbHandle
 };
 
 } // namespace qrcp
-
-#endif  // #ifndef _CB_HANDLE_H_

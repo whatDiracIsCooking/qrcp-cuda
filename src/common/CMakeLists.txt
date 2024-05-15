@@ -3,6 +3,7 @@ add_library(HelperCuda
     SHARED
     helper_cuda.h
     streamEvent.h
+    cusolverCheck.h
 )
 
 target_link_libraries(HelperCuda
@@ -10,6 +11,7 @@ target_link_libraries(HelperCuda
     -lcuda
     -lcudart
     -lcublas
+    -lcusolver
     -lstdc++
 )
 
