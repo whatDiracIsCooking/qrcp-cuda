@@ -90,24 +90,7 @@ inline uint computeMaxBlocks(const uint maxConcurrentBlocks,
 }
 
 
-//struct KernelParamsBase
-//{
-//    uint32 maxBlocks,
-//           numElts,
-//           shmemSize;
-//    
-//    dim3 blockDims,
-//         gridDims;
-//
-//    cudaStream_t str = 0;
-//};
-
-
 } // namespace qrcp
-
-
-// TODO: Add convenience macros for events and
-// streams.
 
  
 

@@ -9,6 +9,8 @@
 
 #include "test_tools.h"
 #include <common/helper_cuda.h>
+#include <wrappers/malloc.h>
+#include <wrappers/memset.h>
 
 namespace qrcp {
 namespace test {
@@ -16,22 +18,16 @@ namespace test {
 //----------------------------------------------------------------------------//
 void initMemPools()
 {
-    const size_t numBytes = MAX_SIZE * sizeof(double);
-
-    // Device pool.
-    CUDA_CHECK(cudaMalloc(reinterpret_cast<void**>(&d_pool), numBytes));
-    CUDA_CHECK(cudaMemset(d_pool, 0, numBytes));
-
-    // Host pool.
-    h_pool = static_cast<void*>(std::malloc(numBytes));
-    std::memset(h_pool, 0, numBytes);
+    const size_t numBytes = MAX_SIZE * 8;
+    d_pool = allocPtr<char, DevPtr>(numBytes);
+    h_pool = allocPtr<char, HostPtr>(numBytes);
 }
 
 //----------------------------------------------------------------------------//
 void releaseMemPools()
 {
-    CUDA_CHECK(cudaFree(d_pool));
-    std::free(h_pool);
+    freePtr(d_pool, DevPtr);
+    freePtr(h_pool, HostPtr);
 }
 
 //----------------------------------------------------------------------------//

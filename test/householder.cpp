@@ -7,15 +7,17 @@
 #include <householder/identity.h>
 #include <common/helper_cuda.h>
 #include <common/streamEvent.h>
-#include <common/cublasWrappers.h>
 #include <common/cbHandle.h>
-#include <common/memcpyWrappers.h>
-#include <common/memsetWrappers.h>
+#include <common/cusolverCheck.h>
+#include <common/dnHandle.h>
+#include <wrappers/cublas.h>
+#include <wrappers/memcpy.h>
+#include <wrappers/memset.h>
 #include "test_tools.h"
-
 
 using namespace qrcp;
 using namespace qrcp::test;
+using namespace HelperCuda;
 
 namespace {
 
@@ -32,7 +34,7 @@ void test_setIdentity(const size_t dim)
 
     // Copy results to host.
     T* h_eye = reinterpret_cast<T*>(h_pool);
-    memcpy<T, D2H>(h_eye, d_eye, dim * dim, stream);
+    memcpy<T, D2H>(h_eye, d_eye, dim * dim, !stream);
 
     // Create validation matrix.
     T* h_validate = reinterpret_cast<T*>(h_pool) + (dim * dim);
@@ -100,25 +102,25 @@ void test_singleReflectorGer(const size_t numRows,
     // cbStream: Copy scalars.
     *h_zero = 0.;
     *h_one = 1.;
-    memcpy<T, H2D>(d_zero, h_zero, 2, cbStream);
+    memcpy<T, H2D>(d_zero, h_zero, 2, !cbStream);
 
     // Create matrix on host.
     numRowNormMatrix<T>(numRows, numCols, h_matrix);
 
     // cbStream: Copy matrix D2H.
-    memcpy<T, H2D>(d_matrix, h_matrix, matrixSize, cbStream);
+    memcpy<T, H2D>(d_matrix, h_matrix, matrixSize, !cbStream);
     cbStream.sync();
 
     // streams[]: Copy column to reflector arrray D2D.
     cuStream& st_cpyColToRefl = ++streams;
     cuEvent& ev_cpyColToRefl = ++events;
-    memcpy<T, D2D>(d_reflectors, d_firstCol, numRows, st_cpyColToRefl);
+    memcpy<T, D2D>(d_reflectors, d_firstCol, numRows, !st_cpyColToRefl);
     st_cpyColToRefl.record(ev_cpyColToRefl);
 
     // streams[]: Copy matrix to work D2D.
     cuStream& st_cpyMatToWork = ++streams;
     cuEvent& ev_cpyMatToWork = ++events;
-    memcpy<T, D2D>(d_work, d_matrix, matrixSize, st_cpyMatToWork);
+    memcpy<T, D2D>(d_work, d_matrix, matrixSize, !st_cpyMatToWork);
     st_cpyMatToWork.record(ev_cpyMatToWork);
 
     // cbStream: Compute 2-norm of column.
@@ -151,8 +153,8 @@ void test_singleReflectorGer(const size_t numRows,
     nrm2(!cbHandle, numRows - 1, d_work + 1, 1, d_mag);
 
     // cbStream: Copy magnitude to host.
-    memcpy<T, D2H>(h_mag, d_mag, 1, cbStream);
-    memcpy<T, D2H>(h_work, d_work, matrixSize, cbStream);
+    memcpy<T, D2H>(h_mag, d_mag, 1, !cbStream);
+    memcpy<T, D2H>(h_work, d_work, matrixSize, !cbStream);
     cbStream.sync();
     assert(std::fabs(h_mag[0]) < TOL);
 }
@@ -193,31 +195,31 @@ void test_makeSingleReflector(const size_t numRows,
     T* h_firstCol = h_matrix;
 
     // cbStream: Zero out householder matrix.
-    memset(d_householder, 0, householderSize, cbStream);
+    memset(d_householder, 0, householderSize, !cbStream);
     cbStream.sync();
 
     // cbStream: Copy scalars.
     *h_zero = 0.;
     *h_one = 1.;
-    memcpy<T, H2D>(d_zero, h_zero, 2, cbStream);
+    memcpy<T, H2D>(d_zero, h_zero, 2, !cbStream);
 
     // Create matrix on host.
     numRowNormMatrix<T>(numRows, numCols, h_matrix);
 
     // cbStream: Copy matrix D2H.
-    memcpy<T, H2D>(d_matrix, h_matrix, matrixSize, cbStream);
+    memcpy<T, H2D>(d_matrix, h_matrix, matrixSize, !cbStream);
     cbStream.sync();
 
     // streams[]: Copy column to reflector arrray D2D.
     cuStream& st_cpyColToRefl = ++streams;
     cuEvent& ev_cpyColToRefl = ++events;
-    memcpy<T, D2D>(d_reflectors, d_firstCol, numRows, st_cpyColToRefl);
+    memcpy<T, D2D>(d_reflectors, d_firstCol, numRows, !st_cpyColToRefl);
     st_cpyColToRefl.record(ev_cpyColToRefl);
 
     // streams[]: Copy matrix to work D2D.
     cuStream& st_cpyMatToWork = ++streams;
     cuEvent& ev_cpyMatToWork = ++events;
-    memcpy<T, D2D>(d_work, d_matrix, matrixSize, st_cpyMatToWork);
+    memcpy<T, D2D>(d_work, d_matrix, matrixSize, !st_cpyMatToWork);
     st_cpyMatToWork.record(ev_cpyMatToWork);
 
     // cbStream: Compute 2-norm of column.
@@ -250,8 +252,8 @@ void test_makeSingleReflector(const size_t numRows,
     nrm2(!cbHandle, numRows - 1, d_work + 1, 1, d_mag);
 
     // cbStream: Copy magnitude to host.
-    memcpy<T, D2H>(h_mag, d_mag, 1, cbStream);
-    memcpy<T, D2H>(h_work, d_work, matrixSize, cbStream);
+    memcpy<T, D2H>(h_mag, d_mag, 1, !cbStream);
+    memcpy<T, D2H>(h_work, d_work, matrixSize, !cbStream);
     cbStream.sync();
     assert(std::fabs(h_mag[0]) < TOL);
 }
@@ -261,6 +263,8 @@ void test_makeSingleReflector(const size_t numRows,
 int main()
 {
     initMemPools();
+
+    dnHandle csHandle;
 
 
     gpuInfo();

@@ -3,6 +3,7 @@ add_executable(IdentityTest identity.cpp)
 
 target_include_directories(IdentityTest
     PRIVATE
+    ${COMMON_DIR}
     ${INCLUDE_DIR}
     ${SRC_DIR}
     ${TEST_DIR}
@@ -13,6 +14,7 @@ target_link_libraries(IdentityTest
     Identity
     TestTools
     HelperCuda
+    Wrappers
     -lcuda
     -lcudart
     -lcublas

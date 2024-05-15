@@ -8,6 +8,7 @@ add_library(TestTools
 
 target_include_directories(TestTools
     PUBLIC
+    ${COMMON_DIR}
     ${SRC_DIR}
     ${INCLUDE_DIR}
 )
@@ -26,6 +27,7 @@ add_executable(HouseHolderTest householder.cpp)
 
 target_include_directories(HouseHolderTest
     PUBLIC
+    ${COMMON_DIR}
     ${SRC_DIR}
     ${INCLUDE_DIR}
 )
@@ -35,6 +37,7 @@ target_link_libraries(HouseHolderTest
     HouseHolder
     TestTools
     HelperCuda
+    Wrappers
     -lcuda
     -lcudart
     -lcublas
